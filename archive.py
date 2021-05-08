@@ -9,6 +9,7 @@ BASE_MERY_URL = 'https://mery.jp'
 DEBUG = False
 launch_args = ['--start-maximized']
 pattern = r'作成：(.{10})'
+file_name_conv_table = str.maketrans(r'\/:*?"<>| ', r'＼／：＊？”＜＞｜_')
 
 
 class Writer:
@@ -164,8 +165,10 @@ async def archive_page(article):
     }}""")
     await page.waitFor(interval_time)
 
+    file_path_unsafe = f'{article.writer_name}/{written_date}_{title}.pdf'
+    file_path_safe = file_path_unsafe.translate(file_name_conv_table)  # ファイル名に使えない文字列を置換
+
     # pdf出力
-    file_path = f'{article.writer_name}/{written_date}_{title}.pdf'
     await page.emulateMedia('screen')
     if DEBUG == False:
         await page.pdf({
