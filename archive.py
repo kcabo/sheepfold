@@ -165,8 +165,9 @@ async def archive_page(article):
     }}""")
     await page.waitFor(interval_time)
 
-    file_path_unsafe = f'{article.writer_name}/{written_date}_{title}.pdf'
-    file_path_safe = file_path_unsafe.translate(file_name_conv_table)  # ファイル名に使えない文字列を置換
+    file_name_unsafe = f'{written_date}_{title}.pdf'
+    file_name_safe = file_name_unsafe.translate(file_name_conv_table)  # ファイル名に使えない文字列を置換
+    file_path = f'{article.writer_name}/{file_name_safe}'
 
     # pdf出力
     await page.emulateMedia('screen')
